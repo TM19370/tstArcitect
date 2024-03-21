@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ApiApp.Controllers.JSON;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace DesktopApp
 {
@@ -32,17 +34,30 @@ namespace DesktopApp
         private void EnterButton_Click(object sender, RoutedEventArgs e)
         {
             HttpClient client = new HttpClient();
-            
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://192.168.149.56/login");
-            httpRequestMessage.Headers.Add("Accept", "application/json");
-            httpRequestMessage.Headers.Add("Content-Type", "application/json");
-            LoginJSON loginJSON = new LoginJSON 
+
+            LoginJSON loginJSON = new LoginJSON
             {
                 login = loginTextBox.Text,
                 password = passwordPasswordBox.Password
             };
 
-            httpRequestMessage.Content = JsonConvert.SerializeObject(loginJSON);
+            StringContent content = new StringContent(JsonConvert.SerializeObject(loginJSON), Encoding.UTF8, "application/json");
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://192.168.25.39:5075/login");
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+
+            httpRequestMessage.Content = content;
+
+            var response = client.SendAsync(httpRequestMessage).Result;
+
+            if((int)response.StatusCode == 200)
+            {
+                MessageBox.Show("ok");
+            }
+            else
+            {
+                MessageBox.Show("error");
+            }
         }
     }
 }

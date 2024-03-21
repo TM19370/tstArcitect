@@ -11,6 +11,7 @@ namespace ApiApp.Controllers
         [Route("login")]
         public IActionResult login([FromBody] LoginJSON loginData)
         {
+            Console.WriteLine($"login: {loginData.login}   password: {loginData.password}");
             try
             {
                 Account? account = db.accounts.Where(x => x.login == loginData.login).FirstOrDefault();
@@ -19,10 +20,12 @@ namespace ApiApp.Controllers
                 if(account.password != loginData.password)
                     throw new Exception();
 
+                Console.WriteLine("ok");
                 return Ok();
             }
             catch (Exception ex)
             {
+                Console.WriteLine("error");
                 return BadRequest("неверные логин или пароль");
             }
             

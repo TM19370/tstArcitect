@@ -11,7 +11,7 @@ namespace DataBaseClasses
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=192.168.121.78;Database=ArcitectDB;User=is;Password=1;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Server=192.168.147.54;Database=ArcitectDB;User=is;Password=1;TrustServerCertificate=True");
         }
 
         public DbSet<Account> accounts { get; set; }
